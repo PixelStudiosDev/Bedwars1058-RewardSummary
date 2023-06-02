@@ -3,10 +3,9 @@ package me.leoo.bedwars.rewardsummary.listeners;
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
-import com.andrei1058.bedwars.api.events.gameplay.GameEndEvent;
 import com.andrei1058.bedwars.api.events.gameplay.GameStateChangeEvent;
 import me.leoo.bedwars.rewardsummary.Main;
-import me.leoo.bedwars.rewardsummary.utils.SummaryUtil;
+import me.leoo.bedwars.rewardsummary.utils.SummaryUtils;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,22 +14,22 @@ import org.bukkit.event.Listener;
 public class GameStart implements Listener {
 
 	@EventHandler
-	public void GameStateChangeEvent(GameStateChangeEvent e){
+	public void GameStateChangeEvent(GameStateChangeEvent event){
+		if(event.getNewState().equals(GameState.playing)){
 
-		if(e.getNewState().equals(GameState.playing)){
-			SummaryUtil.startMoney.clear();
-			SummaryUtil.startExp.clear();
+			SummaryUtils.getStartMoney().clear();
+			SummaryUtils.getStartExp().clear();
 
-			SummaryUtil.endMoney.clear();
-			SummaryUtil.endExp.clear();
-			SummaryUtil.levelUpExp.clear();
+			SummaryUtils.getEndMoney().clear();
+			SummaryUtils.getEndExp().clear();
+			SummaryUtils.getLevelUpExp().clear();
 
-			IArena arena = e.getArena();
-			Economy economy = Main.getEconomy();
+			IArena arena = event.getArena();
+			Economy economy = Main.getPlugin().getEconomy();
 			for(Player player : arena.getPlayers()){
-				SummaryUtil.startMoney.put(player, (int) economy.getBalance(player));
-				SummaryUtil.startExp.put(player, BedWars.getLevelSupport().getCurrentXp(player));
-				SummaryUtil.levelUpExp.put(player, 0);
+				SummaryUtils.getStartMoney().put(player, (int) economy.getBalance(player));
+				SummaryUtils.getStartExp().put(player, BedWars.getLevelSupport().getCurrentXp(player));
+				SummaryUtils.getLevelUpExp().put(player, 0);
 			}
 		}
 	}

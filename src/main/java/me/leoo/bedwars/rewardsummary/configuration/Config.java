@@ -37,6 +37,7 @@ public class Config extends ConfigManager {
         yml.addDefault("reward_summary.progress_bar.unlocked-color", "&b");
         yml.addDefault("reward_summary.progress_bar.locked-color", "&7");
 
+        yml.addDefault("reward_summary.new_level.level_name", "Level");
         yml.addDefault("reward_summary.new_level.text", Arrays.asList("0-99:{level}",
                 "100-100:&fIron Prestige",
                 "101-199:{level}",
