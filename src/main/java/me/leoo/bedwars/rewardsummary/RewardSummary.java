@@ -2,27 +2,23 @@ package me.leoo.bedwars.rewardsummary;
 
 import lombok.Getter;
 import me.leoo.bedwars.rewardsummary.configuration.Config;
-import me.leoo.bedwars.rewardsummary.configuration.ConfigManager;
-import me.leoo.bedwars.rewardsummary.listeners.GameEnd;
-import me.leoo.bedwars.rewardsummary.listeners.GameStart;
-import me.leoo.bedwars.rewardsummary.listeners.LevelUp;
-import me.leoo.bedwars.rewardsummary.utils.SummaryUtils;
+import me.leoo.bedwars.rewardsummary.listeners.GameEndListener;
+import me.leoo.bedwars.rewardsummary.listeners.GameStartListener;
+import me.leoo.bedwars.rewardsummary.listeners.LevelUpListener;
+import me.leoo.utils.bukkit.config.ConfigManager;
+import me.leoo.utils.bukkit.events.Events;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.List;
-
 @Getter
-public class Main extends JavaPlugin {
+public class RewardSummary extends JavaPlugin {
 
-    @Getter
-    private static Main plugin;
+    private static RewardSummary plugin;
+
     private ConfigManager mainConfig;
     private Economy economy;
-    private final SummaryUtils utils = new SummaryUtils();
 
     @Override
     public void onEnable() {
@@ -33,36 +29,47 @@ public class Main extends JavaPlugin {
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
+
         if (!Bukkit.getPluginManager().isPluginEnabled("Vault")) {
             getLogger().severe("Vault was not found. Disabling...");
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
 
-        vaultHook();
+        if(!vaultHook()) {
+            getLogger().severe("Could not hook into Vault. Disabling...");
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        }
 
-        mainConfig = new Config(this, "config", getDataFolder().getPath());
+        mainConfig = new Config("config", "plugins/BedWars1058/Addons/MapSelector");
 
         registerEvents();
 
-        Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&aBedWars1058 Reward Summary addon has been successfully enabled."));
+        getLogger().info(getDescription().getName() + " plugin by itz_leoo has been successfully enabled.");
     }
 
     @Override
     public void onDisable() {
-        Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&cBedWars1058 Reward Summary addon has been successfully disabled."));
+        getLogger().info(getDescription().getName() + " plugin by itz_leoo has been successfully disabled.");
     }
 
     private void registerEvents() {
-        List.of(new GameStart(), new GameEnd(), new LevelUp())
-                .forEach(listener -> Bukkit.getPluginManager().registerEvents(listener, this));
+        Events.register(new GameStartListener(), new GameEndListener(), new LevelUpListener());
     }
 
-    private void vaultHook() {
+    private boolean vaultHook() {
         RegisteredServiceProvider<Economy> provider = getServer().getServicesManager().getRegistration(Economy.class);
         if (provider == null) {
-            return;
+            return false;
         }
+
         economy = provider.getProvider();
+
+        return economy != null;
+    }
+
+    public static RewardSummary get() {
+        return plugin;
     }
 }

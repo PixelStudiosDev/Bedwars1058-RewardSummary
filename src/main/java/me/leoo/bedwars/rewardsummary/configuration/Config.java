@@ -1,22 +1,22 @@
 package me.leoo.bedwars.rewardsummary.configuration;
 
-import me.leoo.bedwars.rewardsummary.Main;
+import me.leoo.bedwars.rewardsummary.RewardSummary;
+import me.leoo.utils.bukkit.config.ConfigManager;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
 
 import java.util.Arrays;
 
 public class Config extends ConfigManager {
 
-    public Config(Plugin plugin, String name, String directory) {
-        super(plugin, name, directory);
+    public Config(String name, String directory) {
+        super(name, directory);
 
         YamlConfiguration yml = getYml();
 
-        yml.options().header(Main.getPlugin().getDescription().getName() + " v" + Main.getPlugin().getDescription().getVersion() + " made by " + Main.getPlugin().getDescription().getAuthors() + ".\n" +
-                "Dependencies: " + Main.getPlugin().getDescription().getDepend() + ".\n" +
-                "SoftDependencies: " + Main.getPlugin().getDescription().getSoftDepend() + ".\n" +
-                "Join my discord for support: https://discord.gg/dtwanz4GQg\n");
+        yml.options().header(RewardSummary.get().getDescription().getName() + " v" + RewardSummary.get().getDescription().getVersion() + " made by " + RewardSummary.get().getDescription().getAuthors() + ".\n" +
+                "Dependencies: " + RewardSummary.get().getDescription().getDepend() + ".\n" +
+                "SoftDependencies: " + RewardSummary.get().getDescription().getSoftDepend() + ".\n" +
+                "Join my discord for support: https://pixelstudios.dev/discord\n");
 
         yml.addDefault("reward_summary.message", Arrays.asList(
                 "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",

@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="BedWars-Rebuilt">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../bw test fork/plugins/BedWars-Rebuilt.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
