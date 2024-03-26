@@ -22,11 +22,11 @@ public class SummaryUtils {
     @Getter
     private static final Map<IArena, List<RewardPlayer>> players = new HashMap<>();
 
-    private static final ConfigManager config = RewardSummary.get().getMainConfig();
+    private static final ConfigManager CONFIG = RewardSummary.get().getMainConfig();
     private static final Level levelSupport = BedWars.getLevelSupport();
 
     public void sendMsg(Player player) {
-        for (String s : RewardSummary.get().getMainConfig().getList("reward_summary.message")) {
+        for (String s : CONFIG.getList("reward_summary.message")) {
 
             int percentage = NumberUtil.getPercentage(levelSupport.getCurrentXp(player), levelSupport.getRequiredXp(player));
 
@@ -36,9 +36,9 @@ public class SummaryUtils {
                     .replace("{progressBar}", getProgressBar(
                             levelSupport.getCurrentXp(player),
                             levelSupport.getRequiredXp(player),
-                            config.getString("reward_summary.progress_bar.symbol").charAt(0),
-                            config.getString("reward_summary.progress_bar.unlocked-color"),
-                            config.getString("reward_summary.progress_bar.locked-color")
+                            CONFIG.getString("reward_summary.progress_bar.symbol").charAt(0),
+                            CONFIG.getString("reward_summary.progress_bar.unlocked-color"),
+                            CONFIG.getString("reward_summary.progress_bar.locked-color")
                     ))
                     .replace("{currentXp}", String.valueOf(levelSupport.getCurrentXp(player)))
                     .replace("{requiredXp}", String.valueOf(levelSupport.getRequiredXp(player)))
@@ -61,14 +61,14 @@ public class SummaryUtils {
 
     private int getEarnedMoney(Player player) {
         RewardPlayer rewardPlayer = getRewardPlayer(player);
-        if(rewardPlayer == null) return 0;
+        if (rewardPlayer == null) return 0;
 
         return rewardPlayer.getEndMoney() - rewardPlayer.getStartMoney();
     }
 
     private int getEarnedExp(Player player) {
         RewardPlayer rewardPlayer = getRewardPlayer(player);
-        if(rewardPlayer == null) return 0;
+        if (rewardPlayer == null) return 0;
 
         return rewardPlayer.getEndExp() - rewardPlayer.getStartExp() + rewardPlayer.getLevelUpExp();
     }
@@ -82,16 +82,18 @@ public class SummaryUtils {
     }
 
     private String getPrestigeText(Player player) {
-        String required = RewardSummary.get().getMainConfig().getString("reward_summary.new_level.level_name") + (levelSupport.getPlayerLevel(player) + 1);
+        String required = CONFIG.getString("reward_summary.new_level.level_name") + (levelSupport.getPlayerLevel(player) + 1);
 
         int level = levelSupport.getPlayerLevel(player) + 1;
 
-        for (String colorString : RewardSummary.get().getMainConfig().getList("reward_summary.new_level.text")) {
+        for (String colorString : CONFIG.getList("reward_summary.new_level.text")) {
             String[] str = colorString.split(":");
+
             int str1 = Integer.parseInt(str[0].split("-")[0]);
             int str2 = Integer.parseInt(str[0].split("-")[1]);
+
             if (level >= str1 && level <= str2) {
-                required = str[1].replace("{level}", (RewardSummary.get().getMainConfig().getString("reward_summary.new_level.level_name") + " " + (levelSupport.getPlayerLevel(player) + 1)));
+                required = str[1].replace("{level}", (CONFIG.getString("reward_summary.new_level.level_name") + " " + (levelSupport.getPlayerLevel(player) + 1)));
             }
         }
 

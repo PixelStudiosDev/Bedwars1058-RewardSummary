@@ -8,7 +8,6 @@ import me.leoo.bedwars.rewardsummary.reward.RewardPlayer;
 import me.leoo.bedwars.rewardsummary.utils.SummaryUtils;
 import me.leoo.utils.bukkit.task.Tasks;
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,24 +17,24 @@ import java.util.Map;
 
 public class GameEndListener implements Listener {
 
-	private static final Map<IArena, List<RewardPlayer>> players = SummaryUtils.getPlayers();
+    private static final Map<IArena, List<RewardPlayer>> players = SummaryUtils.getPlayers();
 
-	@EventHandler
-	public void GameEndEvent(GameEndEvent event){
-		IArena arena = event.getArena();
-		Economy economy = RewardSummary.get().getEconomy();
+    @EventHandler
+    public void GameEndEvent(GameEndEvent event) {
+        IArena arena = event.getArena();
+        Economy economy = RewardSummary.get().getEconomy();
 
-		for(Player player : arena.getPlayers()){
-			Tasks.later(() -> {
-				players.get(arena).forEach(rewardPlayer -> {
-					if(rewardPlayer.getUuid().equals(player.getUniqueId())){
-						rewardPlayer.setEndMoney((int) economy.getBalance(player));
-						rewardPlayer.setEndExp(BedWars.getLevelSupport().getCurrentXp(player));
+        Tasks.later(() -> {
+            for (Player player : arena.getPlayers()) {
+                players.get(arena).forEach(rewardPlayer -> {
+                    if (rewardPlayer.getUuid().equals(player.getUniqueId())) {
+                        rewardPlayer.setEndMoney((int) economy.getBalance(player));
+                        rewardPlayer.setEndExp(BedWars.getLevelSupport().getCurrentXp(player));
 
-						SummaryUtils.sendMsg(player);
-					}
-				});
-			}, 20L);
-		}
-	}
+                        SummaryUtils.sendMsg(player);
+                    }
+                });
+            }
+        }, 20L);
+    }
 }

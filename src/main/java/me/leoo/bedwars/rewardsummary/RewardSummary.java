@@ -36,13 +36,13 @@ public class RewardSummary extends JavaPlugin {
             return;
         }
 
-        if(!vaultHook()) {
+        if (!vaultHook()) {
             getLogger().severe("Could not hook into Vault. Disabling...");
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
 
-        mainConfig = new Config("config", "plugins/BedWars1058/Addons/MapSelector");
+        mainConfig = new Config("config", "plugins/BedWars1058/Addons/RewardSummary");
 
         registerEvents();
 
